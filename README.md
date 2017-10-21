@@ -1,3 +1,4 @@
+#gnBackup
 Welcome to gnBackup script
 This is a simple script to backup your files and folders where it simply
 uses tar command to tarball your files and folders ,zipping them, and 
