@@ -32,7 +32,7 @@ echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo " Backup script, splits large files into multiple chuncks of"
 echo " 2GB files to be easilly managed by most media"
 echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"; echo -e '\E[0m'
-for i in {1..15}
+for i in {1..10}
 do
 	sleep 1
 	echo -n .
@@ -349,7 +349,7 @@ case $selection in
 		tput cnorm
 		exit 0
 	;;
-	*) echo " choose: {1 | 2 | 3 | 4 | 5} "
+	*) echo " choose: {1 | 2 | 3 | 4 | 5 | 6} "
 	   exit 1
 	;;
 esac
