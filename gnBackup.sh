@@ -1,10 +1,15 @@
 #!/bin/bash
-#Purpose = (Full | Incremental) Backup's 
-#Created on 10/10/2017
-#Author = G.Nikolaidis
-#Contact = gnlinuz@yahoo.com
-#Version 1.01
+# Purpose = (Full | Incremental) Backup's 
+# Created on 10/10/2017
+# Author = G.Nikolaidis
+# Contact = gnlinuz@yahoo.com
+# Version 1.01
 
+# Sing bellow co-author
+# Co-Author:
+# Date altered:
+# Your modification:
+# Conatct = 
 
 TIME=`date +%Y%m%d-%H%M%S`
 DN=F                                      
@@ -23,8 +28,6 @@ IN=I
 start()
 {
 clear
-#echo -en '\E[36;40m'"%%%%%%%%%%%% Script Author G.Nikolaidis 2017 %%%%%%%%%%%%%%%%%"; echo -e '\E[0m'
-#echo "-------------------------------------------------------------------"
 echo
 echo -e '\E[36;40m'"+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "              Script to backup your files or folders"
@@ -32,20 +35,27 @@ echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo " Backup script, splits large files into multiple chuncks of"
 echo " 2GB files to be easilly managed by most media"
 echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"; echo -e '\E[0m'
-for i in {1..10}
+for i in {1..3}
 do
 	sleep 1
 	echo -n .
 done
 clear
-echo "-------------------------------------------------------------------"
+echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo " 1. Run a full backup now"
 echo " 2. Schedule a backup (Full/Incremental)"
 echo " 3. Restore instatructions"
 echo " 4. Change default 2GB backup size"
-echo " 5. About"
-echo " 6. Exit."
-echo "-------------------------------------------------------------------"
+echo " 5. Check for schedule"
+echo " 6. About"
+echo " 7. Exit."
+echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+echo -e '\E[36;40m'" NOTE: keep in mind that  script  uses  crontab  for schedulling"
+echo " therefore any prior  schedule that might exist will be removed."
+echo " Before   schedule   a  backup,  select  from  within  the  menu"
+echo " \"check for schedule\"    and     make    a    note    of     it"; echo -e '\E[0m' 
 #cursor is off
 tput civis 
 #tput cnorm cursor is on again
@@ -106,20 +116,6 @@ jobNow()
 {
 tput cnorm
 
-#FE="n"
-#while [ $FE == "n" ]
-#do
-#	printf "Enter the source backup folder (ex. /etc) "
-#	read -r source_path
-#
-#	if [ ! -d $source_path ];then
-#		echo -en '\E[31;40m'"The directory does not exist!! check your path or filename "; echo -e '\E[0m'
-#    	else
-#		printf "OK source path is valid: "
-#		echo -en '\E[32;40m'"$source_path/"; echo -e '\E[0m'
-#		FE="y"
-#	fi
-#done
 
 FE="n"
 while [ $FE == "n" ]
@@ -141,8 +137,6 @@ do
 		fi
 	fi
 done
-#printf "Optional, enter a name of the backup file: "
-#read -r name
 }
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -316,6 +310,9 @@ case $selection in
 		echo "-------------------------------------------------------------------"; echo -e '\E[0m'
 	;;
 	5)	clear
+		crontab -l
+	;;
+	6)	clear
 		echo -e '\E[36;40m'"+++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 		echo " Purpose = (Full | Incremental) Backup's"
 		echo " Created on 10/10/2017"
@@ -345,7 +342,7 @@ case $selection in
 		echo " happen. Have fun backing up!!"
 		echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++"; echo -e '\E[0m'
 	;;
-	6)	echo " sagionara..."
+	7)	echo " sagionara..."
 		tput cnorm
 		exit 0
 	;;
@@ -354,14 +351,12 @@ case $selection in
 	;;
 esac
 
-#clear
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#                                                     run tar for job now
+#                                                     run job NOW
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 if [ $selection -eq 1 ];then
 	(tar -cvzf - $mSrcPath | split -b 2000M - $dest_path/$DN$TIME.tar.gz_) > /var/log/myBackup.log 2>&1
 
-# tar -cvzf $dest_path/$DN$TIME.tar.gz $mSrcPath > /var/log/myBackup.log 2>&1
 	if [ $? -eq 0 ];then
         	echo "-------------------------------------------------------------------"
         	echo -en '\E[36;40m'"Backup finished successfull...check the backup folder"; echo -e '\E[0m'
@@ -377,7 +372,8 @@ if [ $selection -eq 1 ];then
 fi
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# END OF SCRIPT
 tput cnorm
+
+# END OF SCRIPT
 
 
