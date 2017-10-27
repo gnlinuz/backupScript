@@ -74,11 +74,10 @@ echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo " 1. Run a full backup now"
 echo " 2. Schedule a backup (Full/Incremental)"
 echo " 3. Dump/Backup MySQL/MariaDB"
-echo " 4. Restore instatructions"
-echo " 5. Change default 2GB backup size"
-echo " 6. Check for schedule"
-echo " 7. About the script"
-echo " 8. Exit."
+echo " 4. Restore data/sql"
+echo " 5. Check for schedule"
+echo " 6. About the script"
+echo " 7. Exit."
 echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo -e '\E[36;40m'" NOTE: keep in mind that  script  uses  crontab  for schedulling"
@@ -103,8 +102,6 @@ while [ $FE == "n" ]
 do
         echo "-------------------------------------------------------------------"
 	echo  -en '\E[36;40m'"Enter source folder or file (ex. /etc) "; read -r source_path; echo -e '\E[0m'
-       # read -r source_path
-
         if [ ! -d $source_path ];then
                 echo -en '\E[31;40m'"The directory does not exist!! check your path or filename "; echo -e '\E[0m'
         else
@@ -136,10 +133,8 @@ echo "-------------------------------------------------------------------"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 jobNow()
 {
-tput cnorm
-
-
-FE="n"
+	tput cnorm
+	FE="n"
 while [ $FE == "n" ]
 do
 	printf "Now enter the destination folder (ex. /backup) "
@@ -166,8 +161,8 @@ done
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 setDates()
 {
-yn=n
-tput civis
+	yn=n
+	tput civis
 while [[ $yn =~ [nN](o)* ]]
 do
 	echo "-------------------------------------------------------------------"
@@ -200,7 +195,7 @@ done
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 setTime()
 {
-yn=n
+	yn=n
 while [[ $yn =~ [nN](o)* ]]
 do
 	echo "-------------------------------------------------------------------"
@@ -253,12 +248,11 @@ done
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 schedule()
 {
-multySrc
-#echo "multi path is:$mSrcPath"
-read dummy
-jobNow
-setDates
-setTime
+	multySrc
+	read dummy
+	jobNow
+	setDates
+	setTime
 if [ $prg -eq 1 ];then
 	fname=$DN-$TIME.tar.gz
 	iname=$IN-$TIME.tar.gz
@@ -392,7 +386,6 @@ restoreAll()
                 echo -en '\E[31;40m'"Restore did not executed properly, exit status is: $?"; echo -e '\E[0m'
                 echo "-------------------------------------------------------------------"
         fi
-	
 }
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -420,7 +413,6 @@ restoreOne()
                 echo "-------------------------------------------------------------------"
         fi
 }
-
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #                                                 selection case
@@ -475,11 +467,11 @@ case $selection in
                         exit
                 fi
 	;;
-	6)	clear
+	5)	clear
 		echo
 		crontab -l
 	;;
-	7)	clear
+	6)	clear
 		echo -e '\E[36;40m'"+++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 		echo " Purpose = (Full | Incremental) Backup's"
 		echo " Created on 10/10/2017"
@@ -495,11 +487,11 @@ case $selection in
 		printf "$LISENCE"
 		echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++"; echo -e '\E[0m'
 	;;
-	8)	echo " sagionara..."
+	7)	echo " sagionara..."
 		tput cnorm
 		exit 0
 	;;
-	*) echo " choose: {1|2|3|4|5|6|7|8} "
+	*) echo " choose: {1|2|3|4|5|6|7} "
 	   exit 1
 	;;
 esac
@@ -526,7 +518,4 @@ fi
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 tput cnorm
-
 # END OF SCRIPT
-
-
