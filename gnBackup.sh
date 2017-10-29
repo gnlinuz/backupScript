@@ -1,5 +1,5 @@
 #!/bin/bash
-# Purpose = (Full | Incremental) Backup's 
+# Purpose = (Full | Incremental) Backup's
 # Created on 10/10/2017
 # Author = G.Nikolaidis
 # Contact = gnlinuz@yahoo.com
@@ -9,10 +9,10 @@
 # Co-Author:
 # Date altered:
 # Your modification:
-# Conatct = 
+# Conatct =
 
 TIME=`date +%Y%m%d-%H%M%S`
-DN=F                                      
+DN=F
 IN=I
 LISENCE="You can freely use/redistribute gnBackup, to anyone as
 long as you want, under the terms  of  the GNU General
@@ -30,19 +30,16 @@ USE THIS SCRIPT AT YOUR OWN RISK !!  Authors  are  not
 responsible for any  missuse  or any damage that might
 happen. Have fun backing up!!\n"
 
-RestoreData="to Restore...
-goto your backup directory, find the file you want
-to Restore and type the following command...
-example:
-cat I-20171018-195601.tar.gz_* | tar xzvf -
-----------------------------------------------------------------
-if you want to Restore it into a different directory
-other than current, type the following command...
-example:
-cat I-20171018-195601.tar.gz_* | tar xzvf - -C /target/directory\n"
+Menu="1. Run a full backup now
+2. Schedule a backup (Full/Incremental)
+3. Dump/Backup MySQL/MariaDB
+4. Restore data/sql
+5. Check for schedule
+6. About the script
+7. Exit.\n"
 
-#FILENAME=dataBackup-$TIME.tar.gz                                
-#DESDIR=/dataBackup                                                  
+#FILENAME=dataBackup-$TIME.tar.gz
+#DESDIR=/dataBackup
 #cat F.backup.tar.gz_* | tar xzvf -
 
 # *****************************************************************************************************************************
@@ -71,21 +68,15 @@ echo "                  Backup your files or folders"
 #clear
 echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-echo " 1. Run a full backup now"
-echo " 2. Schedule a backup (Full/Incremental)"
-echo " 3. Dump/Backup MySQL/MariaDB"
-echo " 4. Restore data/sql"
-echo " 5. Check for schedule"
-echo " 6. About the script"
-echo " 7. Exit."
+printf "$Menu"
 echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo -e '\E[36;40m'" NOTE: keep in mind that  script  uses  crontab  for schedulling"
 echo " therefore any prior  schedule that might exist will be removed."
 echo " Before   schedule   a  backup,  select  from  within  the  menu"
-echo " \"check for schedule\"    and     make    a    note    of     it"; echo -e '\E[0m' 
+echo " \"check for schedule\"    and     make    a    note    of     it"; echo -e '\E[0m'
 #cursor is off
-tput civis 
+tput civis
 #tput cnorm cursor is on again
 read -n 1 -s selection;
 }
@@ -101,7 +92,7 @@ mSrcPath=""
 while [ $FE == "n" ]
 do
         echo "-------------------------------------------------------------------"
-	echo  -en '\E[36;40m'"Enter source folder or file (ex. /etc) "; read -r source_path; echo -e '\E[0m'
+	echo  -en '\E[36;40m'"Enter source folder or file (ex. /etc) "; echo -en '\E[0m'; read -r source_path
         if [ ! -d $source_path ];then
                 echo -en '\E[31;40m'"The directory does not exist!! check your path or filename "; echo -e '\E[0m'
         else
@@ -123,13 +114,13 @@ do
         fi
 done
 echo "-------------------------------------------------------------------"
-printf "your selection is: "
-echo -en '\E[36;40m'"$mSrcPath"; echo -e '\E[0m'
+echo -n "your backup folders are: "
+echo -en '\E[32;40m'"$mSrcPath"; echo -e '\E[0m'
 echo "-------------------------------------------------------------------"
 }
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#                                         set destination, destination check 
+#                                         set destination, destination check
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 jobNow()
 {
@@ -137,9 +128,7 @@ jobNow()
 	FE="n"
 while [ $FE == "n" ]
 do
-	printf "Now enter the destination folder (ex. /backup) "
-	read -r dest_path
-
+	echo -en '\E[36;40m'"Now enter the destination folder (ex. /backup) "; echo -en '\E[0m';read -r dest_path
 	if [[ $dest_path =~ .*/boot.* ]] || [[ $dest_path =~ .*/proc.* ]] || [[ $dest_path =~ .*/etc.* ]] || [[ $dest_path =~ .*/sys.* ]] || [[ $dest_path =~ .*/dev.* ]] || [[ "$dest_path" == "/" ]] \
 		|| [[ "$dest_path" == "/var" ]] || [[ "$dest_path" == "/usr" ]] || [[ "$dest_path" == "/bin" ]] || [[ "$dest_path" == "/lib" ]] || [[ "$dest_path" == "/lib64" ]];then
 		echo -en '\E[31;40m'"The directory you have selected is not appropriate for destination"; echo -e '\E[0m'
@@ -201,7 +190,7 @@ do
 	echo "-------------------------------------------------------------------"
 	echo "Enter start backup time, valid values {0..23}"
 	read T
-	
+
 	if [[ $T =~ ^[a-zA-Z] ]]
 	then
 		echo -en '\E[31;40m'" valid values are {0..23}"; echo -e '\E[0m'
@@ -249,7 +238,7 @@ done
 schedule()
 {
 	multySrc
-	read dummy
+#	read dummy
 	jobNow
 	setDates
 	setTime
@@ -262,7 +251,7 @@ if [ $prg -eq 1 ];then
 	#echo $M $T "* * 6	tar --listed-incremental=snap --level=0 -cvzf" $dest_path"/"$DN"-\`date \"+\\%Y\\%m\\%d-\\%H\\%M\\%S\"\`.tar.gz" $mSrcPath>/root/bkcF.cron "> /var/log/myBackup.log 2>&1"
 	#echo $M $T "* * 1-5     tar --listed-incremental=snap  -cvzf" $dest_path"/"$IN"-\`date \"+\\%Y\\%m\\%d-\\%H\\%M\\%S\"\`.tar.gz" $mSrcPath>>/root/bkcF.cron "> /var/log/myBackup.log 2>&1"
 	crontab /root/bkcF.cron
-fi	
+fi
 
 if [ $prg -eq 2 ];then
 	touch /root/backup.cron
@@ -287,7 +276,29 @@ fi
 }
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#                                                      MySQL MariaDB backup
+#                                                   Backup finished successful
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+bSuccess()
+{
+	echo "-------------------------------------------------------------------"
+	echo -en '\E[36;40m'"Backup finished successfull...check the backup folder"; echo -e '\E[0m'
+	echo -en '\E[36;40m'"log is available at /var/log/myBackup.log"; echo -e '\E[0m'
+	echo "-------------------------------------------------------------------"
+}
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#                                               Backup did not finish successful
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+bNotSuccess()
+{
+	echo "-------------------------------------------------------------------"
+	echo -en '\E[31;40m'"the backup did not executed properly, exit status is: $?"; echo -e '\E[0m'
+	echo -en '\E[31;40m'"check the log file at /var/log/myBackup.log"; echo -e '\E[0m'
+	echo "-------------------------------------------------------------------"
+}
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#                                                    MySQL MariaDB backup
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 sqlBackup()
 {
@@ -311,15 +322,9 @@ allSql()
 	read -r sUser
 	(mysqldump -u$sUser -p --all-databases | gzip > $dest_path/allDatabases$TIME.sql.gz) >/var/log/myBackup.log 2>&1
 	if [ $? -eq 0 ];then
-                echo "-------------------------------------------------------------------"
-                echo -en '\E[36;40m'"Backup finished successfull...check the backup folder"; echo -e '\E[0m'
-                echo -en '\E[36;40m'"log is available at /var/log/myBackup.log"; echo -e '\E[0m'
-                echo "-------------------------------------------------------------------"
+                bSuccess
         else
-                echo "-------------------------------------------------------------------"
-                echo -en '\E[31;40m'"the backup did not executed properly, exit status is: $?"; echo -e '\E[0m'
-                echo -en '\E[31;40m'"check the log file at /var/log/myBackup.log"; echo -e '\E[0m'
-                echo "-------------------------------------------------------------------"
+                bNotSuccess
         fi
 }
 
@@ -336,15 +341,9 @@ oneDB()
 	read -r dbName
 	(mysqldump -u$sUser -p $dbName |gzip > $dest_path/$dbName$TIME.sql.gz) >/var/log/myBackup.log 2>&1
 	if [ $? -eq 0 ];then
-                echo "-------------------------------------------------------------------"
-                echo -en '\E[36;40m'"Backup finished successfull...check the backup folder"; echo -e '\E[0m'
-                echo -en '\E[36;40m'"log is available at /var/log/myBackup.log"; echo -e '\E[0m'
-                echo "-------------------------------------------------------------------"
+                bSuccess
         else
-                echo "-------------------------------------------------------------------"
-                echo -en '\E[31;40m'"the backup did not executed properly, exit status is: $?"; echo -e '\E[0m'
-                echo -en '\E[31;40m'"check the log file at /var/log/myBackup.log"; echo -e '\E[0m'
-                echo "-------------------------------------------------------------------"
+                bNotSuccess
         fi
 }
 
@@ -356,7 +355,7 @@ restoreSel()
 	clear
 	echo
 	echo "-------------------------------------------------------------------"
-	echo " 1. Restore data"
+	echo " 1. Restore backup file"
 	echo " 2. Restore all-databases MySQL/MariaDB"
 	echo " 3. Restore one database MySQL/MariaDB"
 	echo " 4. Exit"
@@ -415,6 +414,39 @@ restoreOne()
 }
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#                                                      Restore Backup Data
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+restoreData()
+{
+	clear
+	tput cnorm
+	echo "-------------------------------------------------------------------"
+        echo "Please enter the source backup file including the path"
+        echo "like the example below, notise it ends in gz_"
+        echo "don't write further than gz_ because restore will fail"
+	echo "-------------------------------------------------------------------"
+	echo -en '\E[32;40m'"example: /dataBackup/F20171028-184659.tar.gz_"; echo -e '\E[0m'
+	echo "-------------------------------------------------------------------"
+	printf "Please  enter the path and backup file name: "
+	read -r resData
+	echo "-------------------------------------------------------------------"
+	printf "Please enter the destination folder to restore: "
+	read -r dPath
+	echo -e '\E[32;40m'"Restoring please wait...."; echo -e '\E[0m'
+	(cat $resData* | tar xzvf - -C $dPath)> /var/log/myBackup.log 2>&1 
+	if [ $? -eq 0 ];then
+                echo "-------------------------------------------------------------------"
+                echo -e '\E[36;40m'"Restore finished successfull..."
+		echo "log is available at /var/log/myBackup.log"; echo -e '\E[0m'
+                echo "-------------------------------------------------------------------"
+        else
+                echo "-------------------------------------------------------------------"
+                echo -en '\E[31;40m'"Restore did not executed properly, exit status is: $?"; echo -e '\E[0m'
+                echo "-------------------------------------------------------------------"
+        fi
+}
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #                                                 selection case
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -428,7 +460,7 @@ case $selection in
 	   	multySrc
 		jobNow
 		echo
-		echo "Start backing up..."
+		echo -en '\E[32;40m'"Backing up please wait...."; echo -e '\E[0m'
 	;;
 	2) 	clear
 		echo "-------------------------------------------------------------------"
@@ -438,13 +470,13 @@ case $selection in
 	;;
 	3)	clear
 		sqlBackup
-		if [ $sqlSel -eq 1 ]; then 
+		if [ $sqlSel -eq 1 ]; then
 			jobNow
-			allSql 
+			allSql
 		fi
-		if [ $sqlSel -eq 2 ]; then 
+		if [ $sqlSel -eq 2 ]; then
 			jobNow
-			oneDB 
+			oneDB
 		fi
 		if [ $sqlSel -eq 3 ]; then
                 	exit
@@ -453,9 +485,10 @@ case $selection in
 	4)	restoreSel
 		clear
 		if [ $resSel -eq 1 ]; then
-                        echo -e '\E[36;40m'"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-			printf "$RestoreData"
-			echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"; echo -e '\E[0m'
+			restoreData
+			#echo -e '\E[36;40m'"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+			#printf "$RestoreData"
+			#echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"; echo -e '\E[0m'
                 fi
 		if [ $resSel -eq 2 ]; then
                         restoreAll
@@ -503,15 +536,9 @@ if [ $selection -eq 1 ];then
 	(tar -cvzf - $mSrcPath | split -b 2000M - $dest_path/$DN$TIME.tar.gz_) > /var/log/myBackup.log 2>&1
 
 	if [ $? -eq 0 ];then
-        	echo "-------------------------------------------------------------------"
-        	echo -en '\E[36;40m'"Backup finished successfull...check the backup folder"; echo -e '\E[0m'
-        	echo -en '\E[36;40m'"log is available at /var/log/myBackup.log"; echo -e '\E[0m'
-        	echo "-------------------------------------------------------------------"
+        	bSuccess
 	else
-        	echo "-------------------------------------------------------------------"
-        	echo -en '\E[31;40m'"the backup did not executed properly, exit status is: $?"; echo -e '\E[0m'
-        	echo -en '\E[31;40m'"check the log file at /var/log/myBackup.log"; echo -e '\E[0m'
-        	echo "-------------------------------------------------------------------"
+        	bNotSuccess
 	fi
 
 fi
