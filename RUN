@@ -1,0 +1,9 @@
+How to run the script:
+
+copy the script anywhere you like,
+just chmod it to 755 and then
+run it by typping ./gnBackup
+The user that runs the script will
+will clear it's own crontab schedule so
+backup existing crontab if you not want
+to loose it. Have fun backing up !! 
