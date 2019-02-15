@@ -1,4 +1,4 @@
-#gnBackup
+# gnBackup
 
 Welcome to gnBackup script.
 To  run  this  script (chmod 755  gnBackup) and just type  ./gnBackup
