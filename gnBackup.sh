@@ -506,11 +506,6 @@ case $selection in
 		echo " Original Author = G.Nikolaidis"
 		echo " Contact = gnlinuz@yahoo.com"
 		echo " Version 1.01"
-		echo " Sing bellow co-author"
-		echo " Co-Author:"
-		echo " Date altered:"
-		echo " Your modification:"
-		echo " Conatct = "
 		echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 		printf "$LISENCE"
 		echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++"; echo -e '\E[0m'
