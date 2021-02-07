@@ -11,8 +11,8 @@
 TIME=`date +%Y%m%d-%H%M%S`
 DN=F
 IN=I
-LISENCE="You can freely use/redistribute gnBackup, to anyone as
-long as you want, under the terms  of  the GNU General
+LISENCE="You can freely use/redistribute gnBackup, as
+long as you want  under the terms  of  the GNU General
 Public License  as   published by  the  Free  Software
 Foundation or modify it as  long as you do  not  alter
 this notice or the authors information.
